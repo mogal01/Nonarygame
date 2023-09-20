@@ -15,14 +15,13 @@ public abstract class Strategy {
 
     private ArrayList<Boolean> playerChoiceHistory;
     private Queue<Boolean> playerChoicePath;
-    private int care;
 
 
-    public Strategy(int care){
+    public Strategy(){
         opponentChoiceHistory=new ArrayList<>();
         playerChoiceHistory=new ArrayList<>();
         playerChoicePath=new LinkedList<>();
-        this.care=care;
+        score=3;
     }
 
     public void setOpponentChoiceHistory(ArrayList<Boolean> opponentChoiceHistory) {
@@ -65,9 +64,9 @@ public abstract class Strategy {
         this.playerChoicePath = playerChoicePath;
     }
 
-    public int getCare() {
-        return care;
-    }
+    public abstract int getCare();
+
+    public abstract void setCare(int c);
 
     public abstract Queue<Boolean> createInitialSequence();
 
@@ -77,7 +76,7 @@ public abstract class Strategy {
 
         if(playerChoicePath.size()<=2)
             Goal.refreshSequence(playerChoicePath);
-        boolean pick=playerChoicePath.element();
+        boolean pick=playerChoicePath.remove();
         playerChoiceHistory.add(pick);
         updateSequences();
 

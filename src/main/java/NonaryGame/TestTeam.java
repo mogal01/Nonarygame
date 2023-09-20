@@ -10,24 +10,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-
-public class Test {
+public class TestTeam {
 
     public static void main(String[] args) throws IOException {
 
 
         ArrayList<String> nomi = new ArrayList<String>(){{
-                add("Angelo");
-                add("Federico");
-                add("Gianmarco");
-                add("Fele");
-                add("Peppe");
-                add("Leo");
-                add("Demetrio");
-                add("Stefano");
-                add("Laby");}
+            add("Angelo");
+            add("Federico");
+            add("Gianmarco");
+            add("Fele");
+            add("Peppe");
+            add("Leo");
+            add("Demetrio");
+            add("Stefano");
+            add("Laby");}
         };
-        String logFilePath = "resoconto.log";
+        String logFilePath = "resocontoTeam.log";
 
         FileWriter fileWriter = new FileWriter(logFilePath, false);
 
@@ -111,9 +110,9 @@ public class Test {
         bufferedWriter.write("\n            GIOCO CONCLUSO \n");
         bufferedWriter.write("\n Ha chiuso il gioco : \n");
         for(i=0;i<=lista.size()-1;i++){
-           if(lista.get(i).isWinningFlag()){
-               bufferedWriter.write(lista.get(i).getName() + "\n" + "Care: " + lista.get(i).getMainStrat().getCare() + " Punteggio: " + lista.get(i).getScore() + "\n");
-           }
+            if(lista.get(i).isWinningFlag()){
+                bufferedWriter.write(lista.get(i).getName() + "\n" + "Care: " + lista.get(i).getMainStrat().getCare() + " Punteggio: " + lista.get(i).getScore() + "\n");
+            }
         }
 
         bufferedWriter.write(game.getWinningPlayers().size() + " Giocatori in totale hanno raggiunto almeno il punteggio di 9\n");
@@ -132,4 +131,5 @@ public class Test {
         bufferedWriter.close();
 
     }
+
 }

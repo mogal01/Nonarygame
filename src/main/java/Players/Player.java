@@ -17,6 +17,7 @@ public class Player {
         name=n;
         mainStrat=m;
         winningFlag=false;
+        active=true;
     }
 
     public boolean isActive() {
@@ -29,12 +30,17 @@ public class Player {
 
     public boolean endGame(){
         NonaryGame game = NonaryGame.getInstance();
+        int useCare= mainStrat.getCare();
+        if (mainStrat.getCare()>game.getActivePlayers().size())
+            useCare=game.getActivePlayers().size();
 
-        if ( (mainStrat.getScore()>=9) && (game.getWinningPlayers().size()-2>=mainStrat.getCare()) ){
+        if ( (mainStrat.getScore() >= 9) && (game.getWinningPlayers().size()-1 >= useCare)) {
             winningFlag=true;
             return true; }
-        else
+        else {
+            winningFlag=false;
             return false;
+        }
 
     }
 
