@@ -7,7 +7,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 public class TestTeam {
@@ -72,15 +71,19 @@ public class TestTeam {
         int countRound=1;
 
         do {
+            System.out.println("Sono entrato nel do");
             bufferedWriter.write("_____________________________________________________________________________");
             bufferedWriter.write("\n      INIZIO ROUND NUMERO: " + countRound + "\n");
-            Collections.shuffle(lista);
+            System.out.println("Sto per fare lo shuffle");
+            game.shuffle(lista);
+            System.out.println("shuffle finito");
             int countGruppo=1;
-            for(i=0;i<=lista.size()-2;i=i+2) {
+            for(i=0;i<=lista.size()-3;i=i+3) {
 
                 Player p1=lista.get(i);
                 Player p2=lista.get(i+1);
-                Round round = new Round(p1, p2);
+                Player p3=lista.get(i+2);
+                Round round = new Round(p1,p2,p3);
 
                 bufferedWriter.write("_____________________________________________________________________________");
                 bufferedWriter.write("\n Round " + countRound + " Gruppo: " + countGruppo + "\n");
@@ -88,12 +91,14 @@ public class TestTeam {
                 game.setCurrentRound(round);
                 String picks = game.playRound();
 
+
                 bufferedWriter.write("Fine round, dati: ");
 
                 bufferedWriter.write("\nScelte: \n" + picks);
 
-                bufferedWriter.write("\nPunteggio " + p1.getName() + " : " + p1.getScore() + "\n");
+                bufferedWriter.write("\n\nPunteggio " + p1.getName() + " **LEADER** : " + p1.getScore() + "\n");
                 bufferedWriter.write("\nPunteggio " + p2.getName() + " : " + p2.getScore() + "\n");
+                bufferedWriter.write("\nPunteggio " + p3.getName() + " : " + p3.getScore() + "\n");
                 countGruppo++;
 
                 game.setAllSequenceSize();

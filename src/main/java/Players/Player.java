@@ -6,9 +6,7 @@ public class Player {
 
     private String name;
     private Strategy mainStrat;
-
     private boolean active;
-
     private boolean winningFlag;
 
     //Anche un parametro di fiducia?
@@ -45,7 +43,7 @@ public class Player {
     }
 
     public boolean pick(){
-        if(mainStrat.getScore()<=0)
+        if((mainStrat.getScore()==0)||(mainStrat.getScore()==-1)||(mainStrat.getScore()==-2))
             return true;
         else
         return mainStrat.pickChoice();
@@ -55,16 +53,8 @@ public class Player {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Strategy getMainStrat() {
         return mainStrat;
-    }
-
-    public void setMainStrat(Strategy mainStrat) {
-        this.mainStrat = mainStrat;
     }
 
     public int getScore() {
@@ -79,4 +69,6 @@ public class Player {
     public boolean isWinningFlag() {
         return winningFlag;
     }
+
+
 }
