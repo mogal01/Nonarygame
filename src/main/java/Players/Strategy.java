@@ -16,6 +16,8 @@ public abstract class Strategy {
 
     private boolean isOpponentFriend;
 
+    private Player ally;
+
 
     public Strategy(){
         opponentChoiceHistory=new ArrayList<>();
@@ -23,6 +25,7 @@ public abstract class Strategy {
         playerChoicePath=new LinkedList<>();
         score=3;
         isOpponentFriend=false;
+        ally=null;
     }
 
     public void setOpponentChoiceHistory(ArrayList<Boolean> opponentChoiceHistory) {
@@ -85,6 +88,16 @@ public abstract class Strategy {
     }*/
 
     public abstract boolean pickChoice();
+
+    public Player getAlly() {
+        return ally;
+    }
+
+    public void setAlly(Player ally) {
+        if(ally!=null)
+            ally=new Player(ally.getName(),ally.getMainStrat());
+        this.ally = ally;
+    }
 
     public boolean isOpponentFriend() {
         return isOpponentFriend;

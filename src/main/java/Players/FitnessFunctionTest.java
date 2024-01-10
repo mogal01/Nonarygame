@@ -28,7 +28,7 @@ public class FitnessFunctionTest {
         int score = 2;
         int opponentScore = 7;
 
-        double fitness = evaluateStrategy(playerPath, opponentHistory, care, trust, score, opponentScore,false);
+        double fitness = evaluateStrategy(playerPath, opponentHistory, care, trust, score, opponentScore,false,null);
 
         System.out.println("Fitness della strategia: " + fitness);
     }

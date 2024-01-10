@@ -125,7 +125,7 @@ public class Goal extends Strategy{
         while(currentGeneration<maxGenerations) {
             ArrayList<Double> grades=new ArrayList<>();
             for (int i = 0; i < population.size(); i++) {
-                grades.add(FitnessFunction.evaluateStrategy(population.get(i), super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend()));
+                grades.add(FitnessFunction.evaluateStrategy(population.get(i), super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend(),super.getAlly()));
             }
 
             // Creare una lista di indici per ordinare la popolazione
@@ -142,7 +142,6 @@ public class Goal extends Strategy{
 
 
             for (int i = 0; i < 2; i++) {
-                System.out.println(indices.get(i));
                 selectedPopulation.add(population.get(indices.get(i)));
             }
 
@@ -151,8 +150,8 @@ public class Goal extends Strategy{
             currentGeneration++;
         }
         Double m1,m2;
-        m1=FitnessFunction.evaluateStrategy(newPath, super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend());
-        m2=FitnessFunction.evaluateStrategy(tempBest, super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend());
+        m1=FitnessFunction.evaluateStrategy(newPath, super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend(),super.getAlly());
+        m2=FitnessFunction.evaluateStrategy(tempBest, super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend(),super.getAlly());
         return m1>m2 ? newPath:tempBest;
 
     }
@@ -167,10 +166,10 @@ public class Goal extends Strategy{
 
         Queue<Boolean> bitflipped=bitFlipMutation(crossovered);
 
-       double val1= FitnessFunction.evaluateStrategy(p1,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
-       double val2= FitnessFunction.evaluateStrategy(crossovered,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
-       double val3= FitnessFunction.evaluateStrategy(bitflipped,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
-       double val4= FitnessFunction.evaluateStrategy(p2,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
+       double val1= FitnessFunction.evaluateStrategy(p1,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend(),super.getAlly());
+       double val2= FitnessFunction.evaluateStrategy(crossovered,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend(),super.getAlly());
+       double val3= FitnessFunction.evaluateStrategy(bitflipped,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend(),super.getAlly());
+       double val4= FitnessFunction.evaluateStrategy(p2,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend(),super.getAlly());
 
        if((val1>=val2)&&(val1>=val3)&&(val1>=val4))
            return p1;
@@ -220,8 +219,8 @@ public class Goal extends Strategy{
         }
 
 
-        double valueChild1=FitnessFunction.evaluateStrategy(tempChild1,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
-        double valueChild2=FitnessFunction.evaluateStrategy(tempChild2,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
+        double valueChild1=FitnessFunction.evaluateStrategy(tempChild1,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend(),super.getAlly());
+        double valueChild2=FitnessFunction.evaluateStrategy(tempChild2,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend(),super.getAlly());
 
         return valueChild1>valueChild2 ? tempChild1:tempChild2;
     }

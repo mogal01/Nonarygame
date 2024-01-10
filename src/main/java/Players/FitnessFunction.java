@@ -7,7 +7,7 @@ import java.util.Queue;
 public class FitnessFunction {
 
 
-    public static double evaluateStrategy(Queue<Boolean> playerPath, ArrayList<Boolean> opponentHistory, int care, int trust, int score, int opponentScore, boolean isOpponentFriend) {
+    public static double evaluateStrategy(Queue<Boolean> playerPath, ArrayList<Boolean> opponentHistory, int care, int trust, int score, int opponentScore, boolean isOpponentFriend, Player Ally) {
 
        int opponentBetraysCounter=0;
        int opponentAllysCounter=0;
@@ -33,10 +33,10 @@ public class FitnessFunction {
         double safeValue=1.0;
 
         //Verifica se la prima futura scelta sarà un betray, che nel caso in cui lo score è 3 o meno significherebbe determinare la sconfitta o il continuo del gioco
-        if((score<=3)&&(!nextPick))
+        if((score<=2)&&(!nextPick))
             safeValue=2.0;
 
-        if((score<=3)&&(nextPick))
+        if((score<=2)&&(nextPick))
             safeValue=0.5;
 
 
@@ -45,7 +45,7 @@ public class FitnessFunction {
 
         // Modifica la valutazione della scelta "ally" se l'avversario è un amico
         if (isOpponentFriend && nextPick) {
-            friendValue = 3.0; // Aumenta il punteggio per aver scelto "ally" con un amico
+            friendValue = 3.5; // Aumenta il punteggio per aver scelto "ally" con un amico
         }
 
         if (isOpponentFriend && !nextPick) {
@@ -66,6 +66,14 @@ public class FitnessFunction {
             i++;
         }while (!playerPathCopy.isEmpty());
 
+        double allyValue=1.0;
+        if(Ally!=null){
+            if((Ally.getScore()<=2)&&(nextPick))
+                allyValue=0.75;
+            if((Ally.getScore()<=2)&&(!nextPick))
+                allyValue=1.75;
+        }
+
         double careAllysScore;
 
        //careAllysScore = (futureAllysCounter>=care) ? 0.8 * ((double) futureBetraysCounter /(futureAllysCounter+1)) : 0.3 * ((double) futureAllysCounter /(futureBetraysCounter+1)); //si contano gli allys nella strategia e si confrontano con il care;
@@ -78,7 +86,7 @@ public class FitnessFunction {
 
         double fitness= careAllysScore + playerBetraysValue + opponentBetraysValue + trustScore + (opponentBetraysCounter / (1.0 - (double) score/9.0)) * safeValue;
 
-        fitness= trustScore * ( (futureAllysCounter*futureAllysValue) + (futureBetraysCounter*futureBetraysValue) + careAllysScore + playerBetraysValue + opponentBetraysValue) * safeValue * friendValue;
+        fitness= trustScore * ( (futureAllysCounter*futureAllysValue) + (futureBetraysCounter*futureBetraysValue) + careAllysScore + playerBetraysValue + opponentBetraysValue) * safeValue * friendValue * allyValue;
 
         return fitness;
     }

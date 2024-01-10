@@ -12,18 +12,21 @@ import java.util.Random;
 public class TestTeam {
 
     public static void main(String[] args) throws IOException {
+        test();
+    }
 
 
+    public static ArrayList<Player> test() throws IOException{
         ArrayList<String> nomi = new ArrayList<String>(){{
-            add("Aldo");
-            add("Helena");
-            add("Simone");
-            add("Pietro");
-            add("Io");
-            add("Salvatore");
-            add("Gravino");
-            add("Darion");
-            add("Marcella");}
+            add("Corvo");
+            add("Falco");
+            add("Aquila");
+            add("Gheppio");
+            add("Condor");
+            add("Gufo");
+            add("Sparviere");
+            add("Civetta");
+            add("Colomba");}
         };
         String logFilePath = "resocontoTeam.log";
         FileWriter fileWriter = new FileWriter(logFilePath, false);
@@ -143,6 +146,8 @@ public class TestTeam {
                 p1.getMainStrat().setOpponentFriend(false);
                 p2.getMainStrat().setOpponentFriend(false);
                 p3.getMainStrat().setOpponentFriend(false);
+                p1.getMainStrat().setAlly(null);
+                p2.getMainStrat().setAlly(null);
             }
             countRound++;
             game.setWinnings();
@@ -175,7 +180,7 @@ public class TestTeam {
 
 
         bufferedWriter.close();
-
+        return lista;
     }
 
 }
