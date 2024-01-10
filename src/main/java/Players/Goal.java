@@ -12,6 +12,7 @@ public class Goal extends Strategy{
 
     private static int sequenceSize;
 
+
     public Goal(int c){
         super();
         Random Random=new Random();
@@ -104,30 +105,55 @@ public class Goal extends Strategy{
 
     }
 
+    @Override
+    public boolean pickChoice(){
+        Queue<Boolean> path=geneticSelection();
+        setPlayerChoicePath(path);
+
+        boolean pick=getPlayerChoicePath().remove();
+        addPlayerChoiceHistory(pick);
+        updateSequences();
+
+        return pick;
+    }
+
     public  Queue<Boolean> geneticSelection(){
-        ArrayList<Double> grades=new ArrayList<>();
-        for(int i=0;i<population.size();i++){
-          grades.add(FitnessFunction.evaluateStrategy(population.get(i),super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore()));
+        Queue<Boolean> newPath = new LinkedList<>();
+        Queue<Boolean> tempBest= new LinkedList<>();
+        int maxGenerations = 10;
+        int currentGeneration = 0;
+        while(currentGeneration<maxGenerations) {
+            ArrayList<Double> grades=new ArrayList<>();
+            for (int i = 0; i < population.size(); i++) {
+                grades.add(FitnessFunction.evaluateStrategy(population.get(i), super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend()));
+            }
+
+            // Creare una lista di indici per ordinare la popolazione
+            List<Integer> indices = new ArrayList<>();
+            for (int i = 0; i < grades.size(); i++) {
+                indices.add(i);
+            }
+
+            // Ordina gli indici in base alle valutazioni (grades)
+            Collections.sort(indices, (i1, i2) -> Double.compare(grades.get(i2), grades.get(i1)));
+            tempBest=population.get(indices.get(0));
+
+            ArrayList<Queue<Boolean>> selectedPopulation = new ArrayList<>();
+
+
+            for (int i = 0; i < 2; i++) {
+                System.out.println(indices.get(i));
+                selectedPopulation.add(population.get(indices.get(i)));
+            }
+
+            newPath = geneticCrossover(selectedPopulation);
+            population.add(newPath);
+            currentGeneration++;
         }
-
-        // Creare una lista di indici per ordinare la popolazione
-        List<Integer> indices = new ArrayList<>();
-        for (int i = 0; i < grades.size(); i++) {
-            indices.add(i);
-        }
-
-        // Ordina gli indici in base alle valutazioni (grades)
-        Collections.sort(indices, (i1, i2) -> Double.compare(grades.get(i2), grades.get(i1)));
-
-
-        ArrayList<Queue<Boolean>> selectedPopulation = new ArrayList<>();
-
-
-        for (int i = 0; i < 2; i++) {
-            selectedPopulation.add(population.get(indices.get(i)));
-        }
-
-        return geneticCrossover(selectedPopulation);
+        Double m1,m2;
+        m1=FitnessFunction.evaluateStrategy(newPath, super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend());
+        m2=FitnessFunction.evaluateStrategy(tempBest, super.getOpponentChoiceHistory(), care, trust, super.getScore(), super.getOpponentScore(), super.isOpponentFriend());
+        return m1>m2 ? newPath:tempBest;
 
     }
 
@@ -136,20 +162,27 @@ public class Goal extends Strategy{
         Queue<Boolean> p1=selected.get(0);
         Queue<Boolean> p2=selected.get(1);
 
+
         Queue<Boolean> crossovered=twoPointCrossover(p1,p2);
 
         Queue<Boolean> bitflipped=bitFlipMutation(crossovered);
 
-       int val1= (int) FitnessFunction.evaluateStrategy(p1,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore());
-       int val2= (int) FitnessFunction.evaluateStrategy(crossovered,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore());
-       int val3= (int) FitnessFunction.evaluateStrategy(bitflipped,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore());
-       int val4= (int) FitnessFunction.evaluateStrategy(p2,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore());
+       double val1= FitnessFunction.evaluateStrategy(p1,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
+       double val2= FitnessFunction.evaluateStrategy(crossovered,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
+       double val3= FitnessFunction.evaluateStrategy(bitflipped,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
+       double val4= FitnessFunction.evaluateStrategy(p2,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
 
-       double randomValue= Math.random();
+       if((val1>=val2)&&(val1>=val3)&&(val1>=val4))
+           return p1;
 
-       return bitflipped;
+        if((val2>=val1)&&(val2>=val3)&&(val2>=val4))
+            return crossovered;
+
+        if((val3>=val2)&&(val3>=val1)&&(val3>=val4))
+            return bitflipped;
+
+        return p2;
     }
-
 
     public Queue<Boolean> twoPointCrossover(Queue<Boolean> parent1, Queue<Boolean> parent2) {
         int size = parent1.size();
@@ -176,17 +209,19 @@ public class Goal extends Strategy{
             if(i<point1) {
                 tempChild1.add(child1.remove());
                 tempChild2.add(child2.remove());
+                break;
             }
 
             if((i>=point1)&&(i<=point2)) {
                 tempChild1.add(child2.remove());
                 tempChild2.add(child1.remove());
+                break;
             }
         }
 
 
-        double valueChild1=FitnessFunction.evaluateStrategy(tempChild1,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore());
-        double valueChild2=FitnessFunction.evaluateStrategy(tempChild2,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore());
+        double valueChild1=FitnessFunction.evaluateStrategy(tempChild1,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
+        double valueChild2=FitnessFunction.evaluateStrategy(tempChild2,super.getOpponentChoiceHistory(),care,trust,super.getScore(),super.getOpponentScore(),super.isOpponentFriend());
 
         return valueChild1>valueChild2 ? tempChild1:tempChild2;
     }
@@ -208,9 +243,5 @@ public class Goal extends Strategy{
 
         return mutatedIndividual;
     }
-
-
-
-
 
 }

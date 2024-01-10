@@ -12,23 +12,23 @@ public class FitnessFunctionTest {
     public static void main(String[] args){
         // Esempio di strategia del giocatore
         Queue<Boolean> playerPath = new LinkedList<>();
-        playerPath.offer(true); // Ally
-        playerPath.offer(false); // Betray
         playerPath.offer(false); // Ally
+        playerPath.offer(true); // Betray
+        playerPath.offer(true); // Ally
 
         // Storia dell'avversario
         ArrayList<Boolean> opponentHistory = new ArrayList<>();
-        opponentHistory.add(false); // Ally
+        opponentHistory.add(true); // Ally
+        opponentHistory.add(true); // Betray
         opponentHistory.add(false); // Betray
-        opponentHistory.add(false); // Betray
-        opponentHistory.add(false); // Ally
+        opponentHistory.add(true); // Ally
 
         int care = 2;
-        int trust = 8;
+        int trust = 7;
         int score = 2;
         int opponentScore = 7;
 
-        double fitness = evaluateStrategy(playerPath, opponentHistory, care, trust, score, opponentScore);
+        double fitness = evaluateStrategy(playerPath, opponentHistory, care, trust, score, opponentScore,false);
 
         System.out.println("Fitness della strategia: " + fitness);
     }

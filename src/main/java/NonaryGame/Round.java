@@ -24,11 +24,13 @@ public class Round {
     }
 
     public String play(){
-        p2.getMainStrat().setOpponentChoiceHistory(p1.getMainStrat().getPlayerChoiceHistory());
-        p1.getMainStrat().setOpponentChoiceHistory(p2.getMainStrat().getPlayerChoiceHistory());
+        p2.getMainStrat().setOpponentChoiceHistory(p3.getMainStrat().getPlayerChoiceHistory());
+        p1.getMainStrat().setOpponentChoiceHistory(p3.getMainStrat().getPlayerChoiceHistory());
+        p3.getMainStrat().setOpponentChoiceHistory(p1.getMainStrat().getPlayerChoiceHistory());
 
-        p1.getMainStrat().setOpponentScore(p2.getScore());
-        p2.getMainStrat().setOpponentScore(p1.getScore());
+        p1.getMainStrat().setOpponentScore(p3.getScore());
+        p2.getMainStrat().setOpponentScore(p3.getScore());
+        p3.getMainStrat().setOpponentScore(p1.getScore());
 
        boolean s1= pair.pick();
        boolean s2= p3.pick();

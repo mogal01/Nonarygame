@@ -14,12 +14,15 @@ public abstract class Strategy {
     private ArrayList<Boolean> playerChoiceHistory;
     private Queue<Boolean> playerChoicePath;
 
+    private boolean isOpponentFriend;
+
 
     public Strategy(){
         opponentChoiceHistory=new ArrayList<>();
         playerChoiceHistory=new ArrayList<>();
         playerChoicePath=new LinkedList<>();
         score=3;
+        isOpponentFriend=false;
     }
 
     public void setOpponentChoiceHistory(ArrayList<Boolean> opponentChoiceHistory) {
@@ -30,8 +33,8 @@ public abstract class Strategy {
         return playerChoiceHistory;
     }
 
-    public void addOpponentChoice(Boolean opponentChoice){
-        opponentChoiceHistory.add(opponentChoice);
+    public void addPlayerChoiceHistory(Boolean choice){
+        playerChoiceHistory.add(choice);
     }
 
     public int getOpponentScore() {
@@ -70,7 +73,7 @@ public abstract class Strategy {
 
     public abstract void updateSequences();
 
-    public boolean pickChoice(){
+    /*public boolean pickChoice(){
 
         if(playerChoicePath.size()<=2)
             Goal.refreshSequence(playerChoicePath);
@@ -79,5 +82,18 @@ public abstract class Strategy {
         updateSequences();
 
         return pick;
+    }*/
+
+    public abstract boolean pickChoice();
+
+    public boolean isOpponentFriend() {
+        return isOpponentFriend;
     }
+
+    public void setOpponentFriend(boolean opponentFriend) {
+        isOpponentFriend = opponentFriend;
+    }
+
+
+
 }

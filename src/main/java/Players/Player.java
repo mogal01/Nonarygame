@@ -2,12 +2,16 @@ package Players;
 
 import NonaryGame.NonaryGame;
 
+import java.util.ArrayList;
+
 public class Player {
 
     private String name;
     private Strategy mainStrat;
     private boolean active;
     private boolean winningFlag;
+
+    private ArrayList<Player> allies;
 
     //Anche un parametro di fiducia?
 
@@ -16,6 +20,7 @@ public class Player {
         mainStrat=m;
         winningFlag=false;
         active=true;
+        allies=new ArrayList<>();
     }
 
     public boolean isActive() {
@@ -68,6 +73,14 @@ public class Player {
 
     public boolean isWinningFlag() {
         return winningFlag;
+    }
+
+    public ArrayList<Player> getAllies() {
+        return allies;
+    }
+
+    public void setAllies(ArrayList<Player> allies) {
+        this.allies = allies;
     }
 
 
