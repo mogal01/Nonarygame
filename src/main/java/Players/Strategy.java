@@ -70,7 +70,7 @@ public abstract class Strategy {
 
     public abstract int getCare();
 
-    public abstract void setCare(int c);
+    public abstract int getTrust();
 
     public abstract Queue<Boolean> createInitialSequence();
 

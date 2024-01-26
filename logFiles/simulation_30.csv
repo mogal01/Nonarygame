@@ -1,0 +1,10 @@
+Player;Care;Trust;R1;R2;R3;R4;R5;R6;Win;FinalScore;
+Corvo;4;3;1;0;0;0;0;1;Y;9;
+Falco;4;0;0;0;0;0;1;1;Y;9;
+Aquila;4;7;0;1;0;1;0;1;Y;10;
+Gheppio;4;4;1;0;1;0;0;1;N;7;
+Condor;4;8;0;0;1;1;0;1;Y;18;
+Gufo;4;5;1;0;0;1;1;1;N;3;
+Sparviere;4;3;1;0;1;1;1;1;N;4;
+Civetta;4;1;0;0;0;0;1;1;Y;9;
+Colomba;4;2;0;1;1;1;1;1;N;8;

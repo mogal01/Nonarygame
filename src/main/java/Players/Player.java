@@ -48,8 +48,10 @@ public class Player {
     }
 
     public boolean pick(){
-        if((mainStrat.getScore()==0)||(mainStrat.getScore()==-1)||(mainStrat.getScore()==-2))
+        if((mainStrat.getScore()==0)||(mainStrat.getScore()==-1)||(mainStrat.getScore()==-2)) {
+            mainStrat.addPlayerChoiceHistory(true);
             return true;
+        }
         else
         return mainStrat.pickChoice();
     }

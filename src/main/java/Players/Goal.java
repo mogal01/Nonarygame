@@ -29,8 +29,8 @@ public class Goal extends Strategy{
     }
 
     @Override
-    public void setCare(int c){
-        care=c;
+    public int getTrust() {
+        return trust;
     }
 
     public static void setSequenceSize(int s){
@@ -110,9 +110,12 @@ public class Goal extends Strategy{
         Queue<Boolean> path=geneticSelection();
         setPlayerChoicePath(path);
 
+        if(population.contains(path))
+            population.remove(path);
         boolean pick=getPlayerChoicePath().remove();
         addPlayerChoiceHistory(pick);
         updateSequences();
+        population.add(path);
 
         return pick;
     }

@@ -12,7 +12,9 @@ public class Team {
     }
 
     public boolean pick(){
-        return leader.pick();
+        boolean LChoice=leader.pick();
+        subordinate.getMainStrat().addPlayerChoiceHistory(LChoice);
+        return LChoice;
     }
 
 

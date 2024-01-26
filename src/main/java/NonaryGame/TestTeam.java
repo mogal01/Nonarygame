@@ -35,6 +35,7 @@ public class TestTeam {
 
 
         NonaryGame game = NonaryGame.getInstance();
+        game.reset();
         Random random=new Random();
         Player p;
         Goal g;
@@ -118,7 +119,6 @@ public class TestTeam {
                 Player p3=lista.get(i+2);
 
                 if(p1.getAllies().contains(p3)) {
-                    System.out.println("Ho messo gli alleati");
                     p1.getMainStrat().setOpponentFriend(true);
                     p3.getMainStrat().setOpponentFriend(true);
                 }

@@ -27,6 +27,13 @@ public class NonaryGame {
         return instance;
     }
 
+    public void reset(){
+        activePlayers=new ArrayList<>();
+        allPlayers=new ArrayList<>();
+        winningPlayers=new ArrayList<>();
+
+    }
+
     public void shuffle(ArrayList<Player> lista){
         Player l1=lista.get(0);
         Player l2=lista.get(3);
