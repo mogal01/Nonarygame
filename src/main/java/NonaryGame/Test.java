@@ -1,6 +1,6 @@
 package NonaryGame;
 
-import Players.Goal;
+import Players.GeneticStrategy;
 import Players.Player;
 
 import java.io.BufferedWriter;
@@ -42,15 +42,16 @@ public class Test {
         NonaryGame game = NonaryGame.getInstance();
         Random random=new Random();
         Player p;
-        Goal g;
+        GeneticStrategy g;
         int i;
         ArrayList<Player> lista=new ArrayList<>();
 
         ArrayList<String> appoggio=nomi;
 
         for(i=0;i<9;i++){
-            g=new Goal(random.nextInt(9));
-            String nomeGenerato=appoggio.get(random.nextInt(appoggio.size()));
+            int nomeappoggio=random.nextInt(appoggio.size());
+            g=new GeneticStrategy(random.nextInt(9),appoggio.get(nomeappoggio));
+            String nomeGenerato=appoggio.get(nomeappoggio);
             p=new Player(nomeGenerato,g);
             lista.add(p);
             appoggio.remove(nomeGenerato);

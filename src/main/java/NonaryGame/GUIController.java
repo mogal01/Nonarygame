@@ -101,6 +101,8 @@ public class GUIController extends Application {
         });
 
 
+
+
         VBox bottomBox = new VBox(btn);
         bottomBox.setAlignment(Pos.BOTTOM_RIGHT); // Allinea il pulsante in basso a destra
         bottomBox.setPadding(new Insets(10)); // Spazio intorno al pulsante
@@ -131,8 +133,7 @@ public class GUIController extends Application {
             rect.setArcHeight(20);
 
             String testo=i + ": "+ risultati.get(i).getName() +"\nScore: " + risultati.get(i).getScore() + "\nCare: " +
-                    risultati.get(i).getMainStrat().getCare() + "\nTrust: " +
-                    risultati.get(i).getMainStrat().getTrust();;
+                    risultati.get(i).getMainStrat().getCare();
 
 
             Text playerText = new Text(testo);
@@ -196,8 +197,7 @@ public class GUIController extends Application {
         ArrayList<Player> copy=new ArrayList<>(risultati);
         for(int i=0;i<9;i++){
             String testo=i + ": "+ risultati.get(i).getName() +"\nScore: " + risultati.get(i).getScore() + "\nCare: " +
-                    risultati.get(i).getMainStrat().getCare() + "\nTrust: " +
-                    risultati.get(i).getMainStrat().getTrust();
+                    risultati.get(i).getMainStrat().getCare();
 
 
             if((i<=copy.size()-1)&&(!copy.get(i).getAllies().isEmpty())){

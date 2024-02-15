@@ -1,10 +1,13 @@
 package NonaryGame;
 
-import Players.Goal;
+import Players.GeneticStrategy;
+import Players.SoloStrategy;
 import Players.Player;
+import Players.evolvedStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class TestFile {
@@ -19,6 +22,7 @@ public class TestFile {
     static String civetta;
     static String colomba;
     private final String directoryPath = "./logFiles";
+    public static ArrayList<Player> playerList=playerList = new ArrayList<Player>();
 
     public static void main(String[] args) throws IOException {
         testFile();
@@ -26,6 +30,7 @@ public class TestFile {
 
 
     public static ArrayList<Player> testFile() throws IOException{
+
 
         // Percorso della directory da esaminare
         String directoryPath = "logFiles";
@@ -44,19 +49,59 @@ public class TestFile {
         } else {
             System.out.println("Il percorso specificato non è una directory.");
         }
+        //double l=((double) 45 /417)+((double) 60 /439)+((double) 119 /408)+((double) 11 /457)+((double) 15 /455)+((double) 23 /455)+((double) 9 /414)+((double) 17 /461);
+        //System.out.println(l/8);
+        /*double betrysinAlwaysAlly=299/3110;
+        System.out.println("Alwyas ally: " +  betrysinAlwaysAlly);
+        double betrysinAlwaysBetray=2286/3256;
+        System.out.println("Alwyas betray: " +  betrysinAlwaysBetray);
+        double P_max = 0.70;
+        double P_min = 0.096;
+        double n = 1573;
+        System.out.println("beta è uguale a : " +  (P_max - P_min) / n);*/
 
-
-        ArrayList<Player> playerList = new ArrayList<Player>(){{
-            add(new Player("Corvo",new Goal(0)));
-            add(new Player("Falco", new Goal(1)));
-            add(new Player("Aquila", new Goal(2)));
-            add(new Player("Gheppio", new Goal(3)));
-            add(new Player ("Condor", new Goal(4)));
-            add(new Player ("Gufo", new Goal (4)));
-            add(new Player("Sparviere", new Goal(4)));
-            add(new Player ("Civetta", new Goal(4)));
-            add(new Player("Colomba", new Goal(4)));}
+        playerList= new ArrayList<Player>(){{
+            add(new Player("Corvo",new SoloStrategy(0,"Corvo",1)));
+            add(new Player("Falco", new SoloStrategy(0,"Falco",1)));
+            add(new Player("Aquila", new GeneticStrategy(2,"Aquila")));
+            add(new Player("Gheppio", new GeneticStrategy(2,"Gheppio")));
+            add(new Player ("Condor", new GeneticStrategy(3,"Condor")));
+            add(new Player ("Gufo", new GeneticStrategy(3,"Gufo")));
+            add(new Player("Sparviere", new GeneticStrategy(4,"Sparviere")));
+            add(new Player ("Civetta", new GeneticStrategy(4,"Civetta")));
+            add(new Player("Colomba", new GeneticStrategy(4,"Colomba")));}
         };
+
+
+
+        for (Player player : playerList) {
+            String playerName = player.getName();
+            int[] trustValues = new int[9]; // Inizializza un array per i valori di trust
+
+            // Percorso completo del file di trust per il giocatore
+            String trustFilePath = "TrustFiles/" + playerName + "Trust.txt";
+            File trustFile = new File(trustFilePath);
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(trustFilePath))) {
+                String line;
+                int index = 0;
+
+                // Leggi i valori di trust dal file
+                while ((line = reader.readLine()) != null) {
+                    //trustValues.add(index++,Integer.parseInt(line));
+                    trustValues[index++]=Integer.parseInt(line);
+                }
+
+                // Imposta i valori di trust per il giocatore
+                player.getMainStrat().setTrust(trustValues);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //player.getMainStrat().createInitialSequence();
+            player.getMainStrat().startingPopulation(player.getName());
+        }
+
+
         String fileName = directoryPath + "/simulation_" + numberOfFiles + ".csv";
         PrintWriter bufferedWriter = new PrintWriter(new FileWriter(fileName, true));
 
@@ -67,7 +112,7 @@ public class TestFile {
         game.reset();
         Random random=new Random();
         Player p;
-        Goal g;
+        GeneticStrategy g;
         int i;
 
         game.setActivePlayers(playerList);
@@ -124,23 +169,27 @@ public class TestFile {
 
 
         int countRound=0;
-         corvo="Corvo;"+playerList.get(0).getMainStrat().getCare()+";"+playerList.get(0).getMainStrat().getTrust()+";";
-         falco="Falco;"+playerList.get(1).getMainStrat().getCare()+";"+playerList.get(1).getMainStrat().getTrust()+";";
-         aquila="Aquila;"+playerList.get(2).getMainStrat().getCare()+";"+playerList.get(2).getMainStrat().getTrust()+";";
-         gheppio="Gheppio;"+playerList.get(3).getMainStrat().getCare()+";"+playerList.get(3).getMainStrat().getTrust()+";";
-         condor="Condor;"+playerList.get(4).getMainStrat().getCare()+";"+playerList.get(4).getMainStrat().getTrust()+";";
-         gufo="Gufo;"+playerList.get(5).getMainStrat().getCare()+";"+playerList.get(5).getMainStrat().getTrust()+";";
-         sparviere="Sparviere;"+playerList.get(6).getMainStrat().getCare()+";"+playerList.get(6).getMainStrat().getTrust()+";";
-         civetta="Civetta;"+playerList.get(7).getMainStrat().getCare()+";"+playerList.get(7).getMainStrat().getTrust()+";";
-         colomba="Colomba;"+playerList.get(8).getMainStrat().getCare()+";"+playerList.get(8).getMainStrat().getTrust()+";";
-        do {
-            game.shuffle(playerList);
-            int countGruppo=1;
-            for(i=0;i<=playerList.size()-3;i=i+3) {
+         corvo="Corvo;"+playerList.get(0).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(0).getMainStrat().getTrust()) +";";
+         falco="Falco;"+playerList.get(1).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(1).getMainStrat().getTrust()) +";";
+         aquila="Aquila;"+playerList.get(2).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(2).getMainStrat().getTrust()) +";";
+         gheppio="Gheppio;"+playerList.get(3).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(3).getMainStrat().getTrust()) +";";
+         condor="Condor;"+playerList.get(4).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(4).getMainStrat().getTrust()) +";";
+         gufo="Gufo;"+playerList.get(5).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(5).getMainStrat().getTrust()) +";";
+         sparviere="Sparviere;"+playerList.get(6).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(6).getMainStrat().getTrust()) +";";
+         civetta="Civetta;"+playerList.get(7).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(7).getMainStrat().getTrust()) +";";
+         colomba="Colomba;"+playerList.get(8).getMainStrat().getCare()+";"+ Arrays.toString(playerList.get(8).getMainStrat().getTrust()) +";";
 
-                Player p1=playerList.get(i);
-                Player p2=playerList.get(i+1);
-                Player p3=playerList.get(i+2);
+        ArrayList<Player> tmpList=new ArrayList<>(playerList);
+
+        do {
+
+            game.shuffle(tmpList);
+            int countGruppo=1;
+            for(i=0;i<=tmpList.size()-3;i=i+3) {
+
+                Player p1=tmpList.get(i);
+                Player p2=tmpList.get(i+1);
+                Player p3=tmpList.get(i+2);
 
                 if(p1.getAllies().contains(p3)) {
                     p1.getMainStrat().setOpponentFriend(true);
@@ -152,7 +201,9 @@ public class TestFile {
 
                 game.setCurrentRound(round);
                 String picks = game.playRound();
-
+                updateStrings(p1);
+                updateStrings(p2);
+                updateStrings(p3);
                 countGruppo++;
 
                 game.setAllSequenceSize();
@@ -163,8 +214,10 @@ public class TestFile {
                 p2.getMainStrat().setAlly(null);
             }
             countRound++;
+            /*System.out.println(playerList.get(1).getName());
+            System.out.println(playerList.get(1).getScore());*/
             game.setWinnings();
-        } while(!game.checkEndGame());
+        } while(!game.checkEndGame()&&countRound<20);
 
 
 
@@ -173,7 +226,7 @@ public class TestFile {
         for(i=1;i<=countRound;i++){
             header=header+"R"+i+";";
         }
-        header=header+"Win;" + "FinalScore;";
+        header=header+"Win;" + "FinalScore;"+"FinalTrustedPlayers";
 
         bufferedWriter.write(header);
         bufferedWriter.write("\n"+corvo);
@@ -207,6 +260,24 @@ public class TestFile {
         }*/
 
 
+        for (Player player : playerList) {
+            String playerName = player.getName();
+            int[] trustValues = player.getMainStrat().getTrust(); // Ottieni l'array di trust per il giocatore
+
+            // Percorso completo del file di trust per il giocatore
+            String trustFilePath = "trustFiles/" + playerName + "Trust.txt";
+
+            try (PrintWriter writer = new PrintWriter(trustFilePath)) {
+                // Scrivi i valori di trust nel file
+                for (int j = 0; j < 9; j++) {
+                    writer.println(trustValues[j]);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         bufferedWriter.close();
         return playerList;
     }
@@ -218,107 +289,201 @@ public class TestFile {
         for(i=0;i<9;i++){
             Player temp=playerList.get(i);
             if(temp.getName().equals("Corvo")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    corvo=corvo+t+";";
-                }
                 if(temp.isWinningFlag())
                     corvo=corvo+"Y;";
                 else
                     corvo=corvo+"N;";
                 corvo=corvo + temp.getScore() +";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    corvo=corvo + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
             if(temp.getName().equals("Falco")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    falco=falco+t+";";
-                }
                 if(temp.isWinningFlag())
                     falco=falco+"Y;";
                 else
                     falco=falco+"N;";
                 falco=falco+temp.getScore() +";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    falco=falco + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
             if(temp.getName().equals("Aquila")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    aquila=aquila+t+";";
-                }
                 if(temp.isWinningFlag())
                     aquila=aquila+"Y;";
                 else
                     aquila=aquila+"N;";
                 aquila=aquila+temp.getScore()+";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    aquila=aquila + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
             if(temp.getName().equals("Gheppio")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    gheppio=gheppio+t+";";
-                }
                 if(temp.isWinningFlag())
                     gheppio=gheppio+"Y;";
                 else
                     gheppio=gheppio+"N;";
                 gheppio=gheppio+temp.getScore()+";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    gheppio=gheppio + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
             if(temp.getName().equals("Condor")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    condor=condor+t+";";
-                }
                 if(temp.isWinningFlag())
                     condor=condor+"Y;";
                 else
                     condor=condor+"N;";
                 condor=condor+temp.getScore()+";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    condor=condor + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
             if(temp.getName().equals("Gufo")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    gufo=gufo+t+";";
-                }
                 if(temp.isWinningFlag())
                     gufo=gufo+"Y;";
                 else
                     gufo=gufo+"N;";
                 gufo=gufo+temp.getScore()+";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    gufo=gufo + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
             if(temp.getName().equals("Sparviere")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    sparviere=sparviere+t+";";
-                }
                 if(temp.isWinningFlag())
                     sparviere=sparviere+"Y;";
                 else
                     sparviere=sparviere+"N;";
                 sparviere=sparviere+temp.getScore()+";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    sparviere=sparviere + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
             if(temp.getName().equals("Civetta")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    civetta=civetta+t+";";
-                }
                 if(temp.isWinningFlag())
                     civetta=civetta+"Y;";
                 else
                     civetta=civetta+"N;";
                 civetta=civetta+temp.getScore()+";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    civetta=civetta + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
             if(temp.getName().equals("Colomba")){
-                for(int j=0;j<temp.getMainStrat().getPlayerChoiceHistory().size();j++){
-                    int t=temp.getMainStrat().getPlayerChoiceHistory().get(j) ? 1:0;
-                    colomba=colomba+t+";";
-                }
                 if(temp.isWinningFlag())
                     colomba=colomba+"Y;";
                 else
                     colomba=colomba+"N;";
                 colomba=colomba+temp.getScore()+";";
+                for(int k=0;k<temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().size();k++)
+                    colomba=colomba + temp.getMainStrat().getPlayerChoicePath().getTrustedPlayers().get(k).getName()+",";
             }
         }
 
+    }
 
+    public static void updateStrings(Player p1){
+        switch(p1.getName()){
+            case "Corvo": {
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                corvo=corvo+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    corvo=corvo+"&"+s2;
+                }
+                corvo=corvo+";";
+                break;
+            }
+            case "Falco":{
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                falco=falco+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    falco=falco+"&"+s2;
+                }
+                falco=falco+";";
+                break;
+            }
+            case "Aquila":{
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                aquila=aquila+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    aquila=aquila+"&"+s2;
+                }
+                aquila=aquila+";";
+                break;
+            }
+            case "Gheppio":{
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                gheppio=gheppio+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    gheppio=gheppio+"&"+s2;
+                }
+                gheppio=gheppio+";";
+                break;
+            }
+            case "Condor":{
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                condor=condor+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    condor=condor+"&"+s2;
+                }
+                condor=condor+";";
+                break;
+            }
+            case "Gufo":{
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                gufo=gufo+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    gufo=gufo+"&"+s2;
+                }
+                gufo=gufo+";";
+                break;
+            }
+            case "Sparviere":{
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                sparviere=sparviere+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    sparviere=sparviere+"&"+s2;
+                }
+                sparviere=sparviere+";";
+                break;
+            }
+            case "Civetta":{
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                civetta=civetta+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    civetta=civetta+"&"+s2;
+                }
+                civetta=civetta+";";
+                break;
+            }
+            case "Colomba":{
+                int t=p1.getMainStrat().getPlayerChoiceHistory().get(p1.getMainStrat().getPlayerChoiceHistory().size()-1) ? 1:0;
+                String s1=p1.getMainStrat().getOpponent().getName();
+                String s2="";
+                colomba=colomba+t+"-"+s1;
+                if(p1.getMainStrat().getOpponent().getMainStrat().getAlly()!=null) {
+                    s2 = p1.getMainStrat().getOpponent().getMainStrat().getAlly().getName();
+                    colomba=colomba+"&"+s2;
+                }
+                colomba=colomba+";";
+                break;
+            }
+        }
     }
 
 }

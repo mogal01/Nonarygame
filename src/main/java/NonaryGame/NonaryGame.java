@@ -1,6 +1,6 @@
 package NonaryGame;
 
-import Players.Goal;
+import Players.GeneticStrategy;
 import Players.Player;
 
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class NonaryGame {
             if(activePlayers.get(i).getScore()>2)
                 count++;
         }
-        Goal.setSequenceSize(count-1);
+        GeneticStrategy.setSequenceSize(count-1);
 
     }
 

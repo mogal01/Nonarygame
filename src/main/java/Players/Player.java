@@ -1,7 +1,5 @@
 package Players;
 
-import NonaryGame.NonaryGame;
-
 import java.util.ArrayList;
 
 public class Player {
@@ -23,6 +21,15 @@ public class Player {
         allies=new ArrayList<>();
     }
 
+
+    public Player(String n){
+        name=n;
+        winningFlag=false;
+        active=true;
+        allies=new ArrayList<>();
+        mainStrat=new GeneticStrategy(n);
+    }
+
     public boolean isActive() {
         return active;
     }
@@ -32,7 +39,7 @@ public class Player {
     }
 
     public boolean endGame(){
-        NonaryGame game = NonaryGame.getInstance();
+        /*NonaryGame game = NonaryGame.getInstance();
         int useCare= mainStrat.getCare();
         if (mainStrat.getCare()>game.getActivePlayers().size())
             useCare=game.getActivePlayers().size();
@@ -43,6 +50,24 @@ public class Player {
         else {
             winningFlag=false;
             return false;
+        }*/
+
+        boolean alliesWin=true;
+        for(int i=0;i<mainStrat.getPlayerChoicePath().getTrustedPlayers().size();i++){
+            if(mainStrat.getPlayerChoicePath().getTrustedPlayers().get(i).getScore()<9) {
+
+                alliesWin = false;
+            }
+        }
+        if((mainStrat.getScore() >= 9)&&(alliesWin)) {
+
+            winningFlag=true;
+
+             return true; }
+        else {
+
+        winningFlag=false;
+        return false;
         }
 
     }
@@ -50,6 +75,8 @@ public class Player {
     public boolean pick(){
         if((mainStrat.getScore()==0)||(mainStrat.getScore()==-1)||(mainStrat.getScore()==-2)) {
             mainStrat.addPlayerChoiceHistory(true);
+            if(name.equals("Corvo"))
+                System.out.println("Sono Corvo e ho perso");
             return true;
         }
         else

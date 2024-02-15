@@ -6,31 +6,33 @@ import java.util.Queue;
 
 public abstract class Strategy {
 
-    private ArrayList<Boolean> opponentChoiceHistory;
-    private int opponentScore;
+    //private ArrayList<Boolean> opponentChoiceHistory;
+    //private int opponentScore;
 
     private int score;
 
     private ArrayList<Boolean> playerChoiceHistory;
-    private Queue<Boolean> playerChoicePath;
+    private Individual playerChoicePath;
 
     private boolean isOpponentFriend;
 
     private Player ally;
 
+    private Player opponent;
+
 
     public Strategy(){
-        opponentChoiceHistory=new ArrayList<>();
+        //opponentChoiceHistory=new ArrayList<>();
         playerChoiceHistory=new ArrayList<>();
-        playerChoicePath=new LinkedList<>();
+        playerChoicePath=new Individual();
         score=3;
         isOpponentFriend=false;
         ally=null;
     }
 
-    public void setOpponentChoiceHistory(ArrayList<Boolean> opponentChoiceHistory) {
+   /* public void setOpponentChoiceHistory(ArrayList<Boolean> opponentChoiceHistory) {
         this.opponentChoiceHistory = opponentChoiceHistory;
-    }
+    }*/
 
     public ArrayList<Boolean> getPlayerChoiceHistory() {
         return playerChoiceHistory;
@@ -40,13 +42,13 @@ public abstract class Strategy {
         playerChoiceHistory.add(choice);
     }
 
-    public int getOpponentScore() {
+   /* public int getOpponentScore() {
         return opponentScore;
-    }
+    }*/
 
-    public void setOpponentScore(int opponentScore) {
+    /*public void setOpponentScore(int opponentScore) {
         this.opponentScore = opponentScore;
-    }
+    }*/
 
     public int getScore() {
         return score;
@@ -56,25 +58,29 @@ public abstract class Strategy {
         this.score = score;
     }
 
-    public ArrayList<Boolean> getOpponentChoiceHistory() {
+    /*public ArrayList<Boolean> getOpponentChoiceHistory() {
         return opponentChoiceHistory;
-    }
+    }*/
 
-    public Queue<Boolean> getPlayerChoicePath() {
+    public Individual getPlayerChoicePath() {
         return playerChoicePath;
     }
 
-    public void setPlayerChoicePath(Queue<Boolean> playerChoicePath) {
+    public void setPlayerChoicePath(Individual playerChoicePath) {
         this.playerChoicePath = playerChoicePath;
     }
 
     public abstract int getCare();
 
-    public abstract int getTrust();
+    public abstract int[] getTrust();
 
-    public abstract Queue<Boolean> createInitialSequence();
+    public abstract void setTrust(int[] newTrust);
 
-    public abstract void updateSequences();
+    public abstract void startingPopulation(String n);
+
+    public abstract void changeTrust(int variation, int indexPlayer);
+
+    //public abstract void updateSequences();
 
     /*public boolean pickChoice(){
 
@@ -107,6 +113,11 @@ public abstract class Strategy {
         isOpponentFriend = opponentFriend;
     }
 
+    public Player getOpponent() {
+        return opponent;
+    }
 
-
+    public void setOpponent(Player opponent) {
+        this.opponent = opponent;
+    }
 }

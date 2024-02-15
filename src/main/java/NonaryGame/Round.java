@@ -20,21 +20,23 @@ public class Round {
         this.p2=p2;
         this.p3=p3;
         pair=new Team(p1,p2);
-        if(p1.getAllies().contains(p2)) {
-            p1.getMainStrat().setAlly(p2);
-            p2.getMainStrat().setAlly(p1);
-        }
+        p1.getMainStrat().setAlly(p2);
+        p2.getMainStrat().setAlly(p1);
 
     }
 
     public String play(){
-        p2.getMainStrat().setOpponentChoiceHistory(p3.getMainStrat().getPlayerChoiceHistory());
+        /*p2.getMainStrat().setOpponentChoiceHistory(p3.getMainStrat().getPlayerChoiceHistory());
         p1.getMainStrat().setOpponentChoiceHistory(p3.getMainStrat().getPlayerChoiceHistory());
         p3.getMainStrat().setOpponentChoiceHistory(p1.getMainStrat().getPlayerChoiceHistory());
 
         p1.getMainStrat().setOpponentScore(p3.getScore());
         p2.getMainStrat().setOpponentScore(p3.getScore());
-        p3.getMainStrat().setOpponentScore(p1.getScore());
+        p3.getMainStrat().setOpponentScore(p1.getScore());*/
+
+        p1.getMainStrat().setOpponent(p3);
+        p2.getMainStrat().setOpponent(p3);
+        p3.getMainStrat().setOpponent(p1);
 
        boolean s1= pair.pick();
        boolean s2= p3.pick();
@@ -47,18 +49,30 @@ public class Round {
            p1.setScore(p1.getScore() + 2);
            p2.setScore(p2.getScore() + 2);
            p3.setScore(p3.getScore() + 2);
+           p1.getMainStrat().changeTrust(+2,TestFile.playerList.indexOf(p3));
+           p2.getMainStrat().changeTrust(+2,TestFile.playerList.indexOf(p3));
+           p3.getMainStrat().changeTrust(+2,TestFile.playerList.indexOf(p1));
        }
 
            if(s1 && !s2){
                p1.setScore(p1.getScore() - 2);
                p2.setScore(p2.getScore() - 2);
                p3.setScore(p3.getScore() + 3);
+               p1.getMainStrat().changeTrust(-2,TestFile.playerList.indexOf(p3));
+               p2.getMainStrat().changeTrust(-2,TestFile.playerList.indexOf(p3));
            }
 
         if(!s1 && s2){
             p1.setScore(p1.getScore() + 3 );
             p2.setScore(p2.getScore() + 3 );
             p3.setScore(p3.getScore() - 2 );
+            p3.getMainStrat().changeTrust(-2,TestFile.playerList.indexOf(p1));
+        }
+
+        if(!s1 && !s2){
+            p1.getMainStrat().changeTrust(-1,TestFile.playerList.indexOf(p3));
+            p2.getMainStrat().changeTrust(-1,TestFile.playerList.indexOf(p3));
+            p3.getMainStrat().changeTrust(-1,TestFile.playerList.indexOf(p1));
         }
 
 
